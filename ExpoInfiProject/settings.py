@@ -85,11 +85,8 @@ WSGI_APPLICATION = 'ExpoInfiProject.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'EXPLORING_INFINITIES',
-        'USER': 'root',
-        'PASSWORD': '123Manas@',
-        'HOST': 'localhost',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
@@ -140,7 +137,7 @@ AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",
     "allauth.account.auth_backends.AuthenticationBackend",
 )
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 SITE_ID = 1
 
 # Provider specific settings

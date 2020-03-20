@@ -19,7 +19,11 @@
             Details about App
         </div>
         <div class="col">
-            <a name="start_game" id="start_game" class="btn btn-primary" href="{% url 'start_game' %}" role="button">Start Game</a>
+            {% if user.is_authenticated %}
+                <a name="start_game" id="start_game" class="btn btn-primary" href="{% url 'start_game' %}" role="button">Start Game</a>
+            {% else %}
+                <a name="start_game" id="start_game" class="btn btn-primary" onclick="loginalert()" role="button">Start Game</a>
+            {% endif %}
         </div>
     </div>
 </section>
@@ -49,5 +53,11 @@
         </table>
     </div>
 </section>
+
+<script>
+    function loginalert(){
+        window.alert("Please Log IN to Start the Game !!")
+    }
+</script>
 
 {% endblock %}

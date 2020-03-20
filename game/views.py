@@ -9,33 +9,32 @@ from .models import Game
 
 def home(request):
     all_users = CustomUser.objects.all().order_by('-high_score')
-    check_custom_user = CustomUser.objects.filter(user=request.user)
-    flag = False
-    print(check_custom_user)
-    if len(check_custom_user) == 0:
-        new_user = CustomUser()
-        new_user.user = User.objects.get(username=request.user)
-        new_user.current_score = 0
-        new_user.high_score = 0
-        new_user.save()
-        flag = True
-    check_game_details = Game.objects.filter(user_id=request.user)
-    if len(check_game_details) == 0:
-        new_game_user = Game()
-        new_game_user.user_id = User.objects.get(username=request.user)
-        new_game_user.current_level = 0
-        new_game_user.save()
-        flag =True
+    if request.user.is_authenticated:
+        check_custom_user = CustomUser.objects.filter(user=request.user)
+        flag = False
+        print(check_custom_user)
+        if len(check_custom_user) == 0:
+            new_user = CustomUser()
+            new_user.user = User.objects.get(username=request.user)
+            new_user.current_score = 0
+            new_user.high_score = 0
+            new_user.save()
+            flag = True
+        check_game_details = Game.objects.filter(user_id=request.user)
+        if len(check_game_details) == 0:
+            new_game_user = Game()
+            new_game_user.user_id = User.objects.get(username=request.user)
+            new_game_user.current_level = 0
+            new_game_user.save()
+            flag =True
 
-    if flag :
-        return redirect(home)
+        if flag :
+            return redirect(home)
     
     return render(request,'home.html', {'users': all_users})
 
 def start_game(request):
-    try:
-        game_details = Game.objects.get(user_id=request.user)
-    except :
+    if not request.user.is_authenticated:
         return redirect(home)
     return render(request,'start_game.html')
 
