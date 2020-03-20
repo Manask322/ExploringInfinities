@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+<!-- templates/home.html -->
+{% block content  %}
+
+
+{% load socialaccount %}
+
+<style>
+    #banner{
+        padding: 10%;
+        padding-left: 23%;
+        background-color: rgb(211, 132, 132);
+    }
+</style>
+
+<section >
+    <div class="row" id="banner">
+        <div class="col">
+            Details about App
+        </div>
+        <div class="col">
+            <a name="start_game" id="start_game" class="btn btn-primary" href="{% url 'start_game' %}" role="button">Start Game</a>
+        </div>
+    </div>
+</section>
+
+<section style="margin-top: 2%;">
+    <div style="text-align: center;">
+        <h1>High Scores</h1>
+    </div>
+    <div class="container" style="width: 60%;">
+        <table class="table table-striped" style="text-align: center;">
+            <thead class="thead-dark">
+                <tr>
+                    <th style="width: 2%;">Id</th>
+                    <th>Name</th>
+                    <th>Score</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <th>{{ forloop.counter}}</th>
+                    <th>{{user.user.username}}</th>
+                    <th>{{user.high_score}}</th>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+{% endblock %}

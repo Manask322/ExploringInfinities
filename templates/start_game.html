@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content  %}
+
+
+<div class="container" style="margin: 10%;margin-left: 18%;">
+    
+    
+        <form action="/game/" method="post" class="form-group">
+            <div class="row">
+                {% csrf_token %}
+                <div class="col">
+                    <div class="col">
+                        <label for="size" >Size : </label>
+                        <input type="number" name="size" id="size" class="form-control" required="required">    
+                    </div>
+                    <div class="col">
+                        <label for="flash">Flash Time : </label>
+                        <input type="number" name="flash" id="flash" class="form-control" required="required">
+                    </div>
+                    <div class="col">
+                        <label for="numbers">Number of Numbers : </label>
+                        <input type="number" name="numbers" id="numbers" class="form-control" required="required">
+                    </div>
+                </div>
+                
+                <div class="col" style="padding-top: 9%;">
+                    <button type="submit" class="btn btn-success">Submit</button>
+                </div>
+            </div>
+        </form>
+  
+</div>
+
+{% endblock %}

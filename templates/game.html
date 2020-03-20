@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+{% block content  %}
+
+
+<div class="container" style="margin: 13%;margin-left: 5%;border-style: groove;">
+    <div class="row" style="padding-top: 5%;">
+        <div class="col" style="text-align: center;">
+            <p>
+                Level
+            </p>
+            <p style="border-style:double">
+                {{current_level}}
+            </p>
+        </div>
+        <div class="col">
+            <div class="container">
+                <a class="btn btn-primary" href="{% url 'start_game' %}" role="button">Reset Game</a>
+            </div>            
+        </div>
+        <div class="col" style="text-align: center;">
+            <p>
+                Current Score
+            </p>
+            <p style="border-style:double">
+                {{current_score}}
+            </p>
+        </div>
+    </div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <div style="text-align: center;">
+        <div class="before_start" style="text-align: center;">
+            <h1></h1>
+        </div>
+        <div class="number_display" style="text-align: center;">
+            <h1></h1>
+        </div>
+        <div id="result_div" style="text-align: center;">
+            
+                <label for="answer">Enter Your Answer : </label>
+                <input type="number" name="answer" id="ans">
+                <button onclick="checkAnswer()">Submit</button>
+            
+        </div>
+        <div class="result" style="text-align: center;">
+            <p>
+                NULL
+            </p>
+        </div>
+    </div>
+    <br>
+    <br>
+    <br>
+    <br>
+</div>
+
+<script>
+
+    function randomInteger(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+    function get_random_number(size_of_digit){
+        size_of_digit = String(size_of_digit).length
+        max = 10
+        while( size_of_digit > 1 ){
+            max *= 10
+            size_of_digit -= size_of_digit
+        }
+        min = max/10
+        max -= 1
+        console.log(max + " : " + min)
+        return randomInteger(min,max)
+    }
+
+    var num_array = [23,27,56,44,67,33]
+    sum = 0
+    before_start_function()
+    console.log({{size}})
+    console.log({{flash}})
+    console.log({{numbers}})
+    num_array = []
+    for (let num = 0; num < {{numbers}}; num++) {
+        num_array.push(get_random_number({{size}}))
+    }
+
+    result_div_ele = document.getElementById("result_div");
+    result_div_ele.style.display = "none";
+
+    result_ele = document.getElementsByClassName("result")[0];
+    result_ele.style.display = "none";
+    async function display_numbers(){    
+        console.log("oi  .... ")
+        for (let index = 0; index < num_array.length; index++) {
+            console.log("here : " +  index)
+            document.getElementsByClassName("number_display")[0].childNodes[1].innerHTML = num_array[index];
+            sum += num_array[index];
+            await sleep({{flash}});
+        }
+    
+        before_start_ele = document.getElementsByClassName("number_display")[0];
+        before_start_ele.style.display = "none";
+        result_div_ele.style.display = "block";
+    }
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms))                   ;
+    }
+    async function before_start_function(){
+        for (let index = 3; index > 0 ; index--) {
+            document.getElementsByClassName("before_start")[0].childNodes[1].innerHTML = index
+            await sleep(1000);
+            console.log(index)
+        }
+        console.log("here already")
+        before_start_ele = document.getElementsByClassName("before_start")[0]
+        before_start_ele.style.display = "none";
+        display_numbers();
+        console.log("oi no")
+    }
+
+    function resolveAfter2Seconds() {
+        
+        console.log(document.getElementsByClassName("result")[0].childNodes[1].innerHTML)
+        document.getElementsByClassName("result")[0].childNodes[1].innerHTML = "<h1><span style=\"color : green\">Correct Advancing to next Level</span></h1>"
+        return new Promise(resolve => {
+            setTimeout(() => {
+                location.replace(location.href);
+            }, 2000);
+        });
+    }
+    async function checkAnswer(){
+        current_answer = document.getElementById('ans').value;
+        console.log("Name : " + current_answer + " " + sum)
+        if(Number(current_answer) == sum){
+            console.log("1") ;
+            document.getElementsByClassName("result")[0].childNodes[1].innerHTML = "<h1><span style=\"color : green\">Correct !!! <br> Advancing to next Level</span></h1>"
+            location.replace(location.href);
+        }
+        else{
+            console.log("2");
+            document.getElementsByClassName("result")[0].childNodes[1].innerHTML = "<h1><span style=\"color : red\">InCorrect</span></h1>"
+        }
+        result_ele.style.display = "block";
+    }
+
+</script>
+{% endblock %}
