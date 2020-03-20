@@ -108,10 +108,11 @@
     }
     async function before_start_function(){
         for (let index = 3; index > 0 ; index--) {
-            document.getElementsByClassName("before_start")[0].childNodes[1].innerHTML = index
+            document.getElementsByClassName("before_start")[0].childNodes[1].innerHTML =  index
             await sleep(1000);
             console.log(index)
         }
+        // document.getElementsByClassName("before_start")[0].childNodes[1].innerHTML = "<p style=\"color: green\">Start !!</p>"
         console.log("here already")
         before_start_ele = document.getElementsByClassName("before_start")[0]
         before_start_ele.style.display = "none";
