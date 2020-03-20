@@ -1,0 +1,14 @@
+{
+    "python.pythonPath": "/usr/bin/python3",
+    "sqltools.connections": [
+        {
+            "database": "EXPLORING_INFINITIES",
+            "dialect": "MySQL",
+            "name": "expoinfi",
+            "password": "123Manas@",
+            "port": 3306,
+            "server": "localhost",
+            "username": "root"
+        }
+    ]
+}
