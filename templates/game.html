@@ -62,11 +62,11 @@
     return Math.floor(Math.random() * (max - min + 1)) + min;
     }
     function get_random_number(size_of_digit){
-        size_of_digit = String(size_of_digit).length
+        size_of_digit = Number(size_of_digit)
         max = 10
         while( size_of_digit > 1 ){
             max *= 10
-            size_of_digit -= size_of_digit
+            size_of_digit -= 1
         }
         min = max/10
         max -= 1
