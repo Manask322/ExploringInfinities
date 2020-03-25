@@ -7,6 +7,16 @@ from users.models import CustomUser
 from .models import Game
 
 
+level_list = [['1', '1500', '5'], ['1', '1500', '10'], ['1', '1500', '15'], 
+            ['1', '1500', '20'], ['1', '1000', '5'], ['1', '1000', '10'], 
+            ['1', '1000', '15'], ['1', '1000', '20'], ['1', '750', '5'], 
+            ['1', '750', '10'], ['1', '750', '15'], ['1', '750', '20'], 
+            ['2', '2000', '3'], ['2', '2000', '5'], ['2', '2000', '7'], 
+            ['2', '1500', '3'], ['2', '1500', '5'], ['2', '1500', '7'], 
+            ['2', '1000', '3'], ['2', '1000', '5'], ['2', '1000', '7'], 
+            ['1', '500', '5'], ['1', '500', '10'], ['1', '500', '15'], 
+            ['1', '500', '20']]
+
 def home(request):
     all_users = CustomUser.objects.all().order_by('-high_score')
     if request.user.is_authenticated:
@@ -38,7 +48,7 @@ def start_game(request):
         return redirect(home)
     return render(request,'start_game.html')
 
-def game(request):
+def game(request,level):
 
     if request.POST:
         data = request.POST
@@ -57,18 +67,24 @@ def game(request):
             user_details.save()
         except :
             return redirect(home)
-        return render(request,'game.html',{ 'size' : size, 'flash': flash, 'numbers': numbers,'current_level':1,'current_score':0 })
+        return render(request,'game.html',{ 'size' : size, 'flash': flash, 'numbers': numbers,'current_level':0,'current_score':0 })
     else:
         print("GET")
         game_details = Game.objects.get(user_id=request.user)
-        game_details.numbers += 1
+        print(game_details.current_level)
+        print(level)
+        user_details = CustomUser.objects.get(user=request.user)
+        if game_details.current_level >= int(level) and game_details.current_level != 0:
+            print("here I am ")
+            return redirect(games)
+        level_details = level_list[game_details.current_level]
+        print(level_details)
         game_details.current_level += 1
-        size = game_details.size
-        flash = game_details.flash
-        numbers = game_details.numbers
+        size = level_details[0]
+        flash = level_details[1]
+        numbers = level_details[2]
         current_level = game_details.current_level
         game_details.save()
-        user_details = CustomUser.objects.get(user=request.user)
         user_details.current_score += 1
         if user_details.current_score > user_details.high_score:
             user_details.high_score = user_details.current_score 
@@ -78,3 +94,16 @@ def game(request):
 
 def login(request):
     return render(request,'registration/login.html')
+
+def games(request):
+    try:
+        game = Game.objects.get(user_id=request.user)
+        game.current_level = 0
+        game.save()
+        current_level = 1
+        user_details = CustomUser.objects.get(user=request.user)
+        user_details.current_score = 0
+        user_details.save()
+    except :
+        return redirect(home)
+    return render(request,'games.html',{'current_level':current_level,'current_score':0})

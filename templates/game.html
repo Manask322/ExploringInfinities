@@ -1,8 +1,18 @@
 {% extends 'base.html' %}
 {% block content  %}
 
+<style>
+    td{
+        color: blue;
+        font-weight: bold;
+        text-align: center;
+    }
+    th{
+        text-align: center;
+    }
+</style>
 
-<div class="container" style="margin: 13%;margin-left: 5%;border-style: groove;">
+<div class="container" style="margin: 2%;margin-left: 13%;border-style: groove;width: 70%;">
     <div class="row" style="padding-top: 5%;">
         <div class="col" style="text-align: center;">
             <p>
@@ -12,10 +22,10 @@
                 {{current_level}}
             </p>
         </div>
-        <div class="col">
-            <div class="container">
-                <a class="btn btn-primary" href="{% url 'start_game' %}" role="button">Reset Game</a>
-            </div>            
+        <div class="col" style="text-align: center; padding-top: 1%;">
+            <p>
+                <a class="btn btn-primary" href="{% url 'games' %}" role="button">Reset Game</a>
+            </p>            
         </div>
         <div class="col" style="text-align: center;">
             <p>
@@ -26,16 +36,38 @@
             </p>
         </div>
     </div>
+    <table  class="table" style="width: 100%;">
+        <thead>
+            <tr>
+                <th>Number of digits</th>
+                <th>Flash</th>
+                <th>Number of numbers</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    {{size}}
+                </td>
+                <td>
+                    {{flash}} ms
+                </td>
+                <td>
+                    {{numbers}}
+                </td>
+            </tr>
+        </tbody>
+    </table>
     <br>
     <br>
     <br>
     <br>
     <div style="text-align: center;">
-        <div class="before_start" style="text-align: center;">
+        <div class="before_start" style="text-align: center; ">
             <h1></h1>
         </div>
         <div class="number_display" style="text-align: center;">
-            <h1></h1>
+            <p style="font-size: 80px;"></p>
         </div>
         <div id="result_div" style="text-align: center;">
             
@@ -57,6 +89,9 @@
 </div>
 
 <script>
+    window.onbeforeunload = function() {
+        return "<b style=\"color:red\">Warning!!</b> you will be redirected to Games Home Page.";
+    }
 
     function randomInteger(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -73,16 +108,26 @@
         console.log(max + " : " + min)
         return randomInteger(min,max)
     }
-
-    var num_array = [23,27,56,44,67,33]
     sum = 0
     before_start_function()
     console.log({{size}})
     console.log({{flash}})
     console.log({{numbers}})
     num_array = []
+    old_rand_num = -1
     for (let num = 0; num < {{numbers}}; num++) {
-        num_array.push(get_random_number({{size}}))
+        
+        rand_num = get_random_number({{size}})
+        while( true ){
+            if(old_rand_num == rand_num){
+                rand_num = get_random_number({{size}})
+            }
+            else{
+                break
+            }
+        }
+        old_rand_num = rand_num
+        num_array.push(rand_num)
     }
 
     result_div_ele = document.getElementById("result_div");
@@ -91,9 +136,7 @@
     result_ele = document.getElementsByClassName("result")[0];
     result_ele.style.display = "none";
     async function display_numbers(){    
-        console.log("oi  .... ")
         for (let index = 0; index < num_array.length; index++) {
-            console.log("here : " +  index)
             document.getElementsByClassName("number_display")[0].childNodes[1].innerHTML = num_array[index];
             sum += num_array[index];
             await sleep({{flash}});
@@ -107,22 +150,22 @@
         return new Promise(resolve => setTimeout(resolve, ms))                   ;
     }
     async function before_start_function(){
-        for (let index = 3; index > 0 ; index--) {
-            document.getElementsByClassName("before_start")[0].childNodes[1].innerHTML =  index
+        for (let index = 3; index > -1 ; index--) {
+            if( index == 0 ){
+                document.getElementsByClassName("before_start")[0].childNodes[1].innerHTML =  "<span style=\"color:green\" >Start !!</span>";
+            }
+            else{
+                document.getElementsByClassName("before_start")[0].childNodes[1].innerHTML =   "<span style=\"color:yellow\">"+ index+"</span>" ;
+            }
             await sleep(1000);
-            console.log(index)
         }
-        // document.getElementsByClassName("before_start")[0].childNodes[1].innerHTML = "<p style=\"color: green\">Start !!</p>"
-        console.log("here already")
         before_start_ele = document.getElementsByClassName("before_start")[0]
         before_start_ele.style.display = "none";
         display_numbers();
-        console.log("oi no")
     }
 
     function resolveAfter2Seconds() {
         
-        console.log(document.getElementsByClassName("result")[0].childNodes[1].innerHTML)
         document.getElementsByClassName("result")[0].childNodes[1].innerHTML = "<h1><span style=\"color : green\">Correct Advancing to next Level</span></h1>"
         return new Promise(resolve => {
             setTimeout(() => {
@@ -132,11 +175,12 @@
     }
     async function checkAnswer(){
         current_answer = document.getElementById('ans').value;
-        console.log("Name : " + current_answer + " " + sum)
         if(Number(current_answer) == sum){
-            console.log("1") ;
             document.getElementsByClassName("result")[0].childNodes[1].innerHTML = "<h1><span style=\"color : green\">Correct !!! <br> Advancing to next Level</span></h1>"
-            location.replace(location.href);
+            location_string = location.href
+            location_string = location_string.substr(0,location_string.length - 1);
+            location_string += String({{current_level}} + 1)
+            location.replace(location_string);
         }
         else{
             console.log("2");
