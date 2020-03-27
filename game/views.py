@@ -31,7 +31,6 @@ def home(request):
     if request.user.is_authenticated:
         check_custom_user = CustomUser.objects.filter(user=request.user)
         flag = False
-        print(check_custom_user)
         if len(check_custom_user) == 0:
             new_user = CustomUser()
             new_user.user = User.objects.get(username=request.user)

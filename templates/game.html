@@ -168,9 +168,11 @@
     }
 
     async function checkAnswer(){
+        result_ele.style.display = "block";
         current_answer = document.getElementById('ans').value;
         if(Number(current_answer) == sum){
-            document.getElementsByClassName("result")[0].childNodes[1].innerHTML = "<h1><span style=\"color : green\">Correct !!! <br> Advancing to next Level</span></h1>"
+            document.getElementsByClassName("result")[0].childNodes[1].innerHTML = "<h1><span style=\"color : green\">Correct !!!</h1><h2>Advancing to next Level</span></h2>"
+            await sleep(2000)
             location_string = location.href
             location_string = location_string.substr(0,location_string.length - 1);
             location_string += String({{current_level}} + 1)
@@ -178,6 +180,7 @@
             location.replace(location_string);
         }
         else{
+
             location_string = location.href
             location_string = location_string.substr(0,location_string.length - 1);
             location_string += String({{current_level}} + 1)
@@ -188,10 +191,11 @@
             end_url = end_url.substr(0,0) + attemps + end_url.substr(1);
             location_string = start_url + end_url
             document.getElementsByClassName("result")[0].childNodes[1].innerHTML = "<h1><span style=\"color : red\">InCorrect</span></h1>"
+            await sleep(2000)
             $(window).unbind('beforeunload');
             location.replace(location_string);
         }
-        result_ele.style.display = "block";
+        
     }
 
 </script>
