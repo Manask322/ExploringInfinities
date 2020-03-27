@@ -17,6 +17,15 @@ level_list = [['1', '1500', '5'], ['1', '1500', '10'], ['1', '1500', '15'],
             ['1', '500', '5'], ['1', '500', '10'], ['1', '500', '15'], 
             ['1', '500', '20']]
 
+list_length = len(level_list)
+
+score_list = [0]
+initial = 100
+for i in range(list_length):
+    score_list.append(initial)
+    initial += 50
+
+
 def home(request):
     all_users = CustomUser.objects.all().order_by('-high_score')
     if request.user.is_authenticated:
@@ -54,8 +63,6 @@ def game(request,attemps,level):
         return redirect(home)
     if not request.session.get('attemps'):
         request.session['attemps'] = attemps
-    print( "seesion  attemps : "  + request.session['attemps'])
-    print("atemps : "  + attemps)
     if request.POST:
         data = request.POST
         size = data['size']
@@ -77,7 +84,7 @@ def game(request,attemps,level):
     else:
         game_details = Game.objects.get(user_id=request.user)
         user_details = CustomUser.objects.get(user=request.user)
-        if game_details.current_level >= int(level) and game_details.current_level != 0:
+        if (game_details.current_level + 1 ) != int(level) and game_details.current_level != 0:
             return redirect(games)
         if( int(attemps) >= 2 ):
             return redirect(games)
@@ -91,9 +98,7 @@ def game(request,attemps,level):
         if int(attemps) > int(request.session['attemps']) :
             request.session['attemps'] = attemps
         else:
-            user_details.current_score += 1
-        print( "seesion  attemps : "  + request.session['attemps'])
-        print("atemps : "  + attemps)
+            user_details.current_score += score_list[game_details.current_level-1]
         if user_details.current_score > user_details.high_score:
             user_details.high_score = user_details.current_score 
         current_score  = user_details.current_score
@@ -114,7 +119,7 @@ def games(request):
         game.save()
         current_level = 1
         user_details = CustomUser.objects.get(user=request.user)
-        user_details.current_score = -1
+        user_details.current_score = 0
         user_details.save()
         attemps = 0
     except :

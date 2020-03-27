@@ -10,82 +10,88 @@
     th{
         text-align: center;
     }
+    #gameback{
+        background-image: url("https://media.istockphoto.com/vectors/number-and-math-symbol-in-color-led-font-on-black-background-vector-id885855890?k=6&m=885855890&s=170667a&w=0&h=Ir_LtUsRAoxDOuHFt8aG0NVLp-RvJVbfNkAJIe_x_KM=");
+        opacity: 90%;
+    }
 </style>
 
-<div class="container" style="margin: 2%;margin-left: 13%;border-style: groove;width: 70%;">
-    <div class="row" style="padding-top: 5%;">
-        <div class="col" style="text-align: center;">
-            <p>
-                Level
-            </p>
-            <p style="border-style:double">
-                {{current_level}}
-            </p>
+<div class="container-fluid" id="gameback">
+    <div class="container" style="margin: 2%;margin-left: 13%;border-style: groove;width: 70%;background-color: white;opacity: 95%;padding-top: 1%;">
+        <div class="row" style="padding-top: 5%;">
+            <div class="col" style="text-align: center;">
+                <p>
+                    Level
+                </p>
+                <p style="border-style:double">
+                    {{current_level}}
+                </p>
+            </div>
+            <div class="col" style="text-align: center; padding-top: 1%;">
+                <p>
+                    <a class="btn btn-primary" href="{% url 'games' %}" role="button">Reset Game</a>
+                </p>            
+            </div>
+            <div class="col" style="text-align: center;">
+                <p>
+                    Current Score
+                </p>
+                <p style="border-style:double">
+                    {{current_score}}
+                </p>
+            </div>
         </div>
-        <div class="col" style="text-align: center; padding-top: 1%;">
-            <p>
-                <a class="btn btn-primary" href="{% url 'games' %}" role="button">Reset Game</a>
-            </p>            
+        <table  class="table" style="width: 100%;">
+            <thead>
+                <tr>
+                    <th>Number of digits</th>
+                    <th>Flash</th>
+                    <th>Number of numbers</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        {{size}}
+                    </td>
+                    <td>
+                        {{flash}} ms
+                    </td>
+                    <td>
+                        {{numbers}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <br>
+        <br>
+        <br>
+        <br>
+        <div style="text-align: center;">
+            <div class="before_start" style="text-align: center; ">
+                <h1></h1>
+            </div>
+            <div class="number_display" style="text-align: center;">
+                <p style="font-size: 80px;"></p>
+            </div>
+            <div id="result_div" style="text-align: center;">
+                
+                    <label for="answer">Enter Your Answer : </label>
+                    <input type="number" name="answer" id="ans">
+                    <button id="checkbtn" onclick="checkAnswer()" class="btn btn-dark">Submit</button>
+                
+            </div>
+            <div class="result" style="text-align: center;">
+                <p>
+                    NULL
+                </p>
+            </div>
         </div>
-        <div class="col" style="text-align: center;">
-            <p>
-                Current Score
-            </p>
-            <p style="border-style:double">
-                {{current_score}}
-            </p>
-        </div>
+        <br>
+        <br>
+        <br>
+        <br>
     </div>
-    <table  class="table" style="width: 100%;">
-        <thead>
-            <tr>
-                <th>Number of digits</th>
-                <th>Flash</th>
-                <th>Number of numbers</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>
-                    {{size}}
-                </td>
-                <td>
-                    {{flash}} ms
-                </td>
-                <td>
-                    {{numbers}}
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <br>
-    <br>
-    <br>
-    <br>
-    <div style="text-align: center;">
-        <div class="before_start" style="text-align: center; ">
-            <h1></h1>
-        </div>
-        <div class="number_display" style="text-align: center;">
-            <p style="font-size: 80px;"></p>
-        </div>
-        <div id="result_div" style="text-align: center;">
-            
-                <label for="answer">Enter Your Answer : </label>
-                <input type="number" name="answer" id="ans">
-                <button id="checkbtn" onclick="checkAnswer()">Submit</button>
-            
-        </div>
-        <div class="result" style="text-align: center;">
-            <p>
-                NULL
-            </p>
-        </div>
-    </div>
-    <br>
-    <br>
-    <br>
-    <br>
 </div>
 
 <script>
@@ -106,7 +112,6 @@
         }
         min = max/10
         max -= 1
-        console.log(max + " : " + min)
         return randomInteger(min,max)
     }
     sum = 0
@@ -173,7 +178,6 @@
             location.replace(location_string);
         }
         else{
-            console.log("2");
             location_string = location.href
             location_string = location_string.substr(0,location_string.length - 1);
             location_string += String({{current_level}} + 1)
