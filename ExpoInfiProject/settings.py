@@ -138,6 +138,9 @@ AUTHENTICATION_BACKENDS = (
     "allauth.account.auth_backends.AuthenticationBackend",
 )
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+# STATICFILES_DIRS = ( os.path.join(BASE_DIR, 'static-assets'), )
+
+# print(STATIC_ROOT)
 SITE_ID = 1
 
 # Provider specific settings

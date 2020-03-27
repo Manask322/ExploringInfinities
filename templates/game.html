@@ -73,7 +73,7 @@
             
                 <label for="answer">Enter Your Answer : </label>
                 <input type="number" name="answer" id="ans">
-                <button onclick="checkAnswer()">Submit</button>
+                <button id="checkbtn" onclick="checkAnswer()">Submit</button>
             
         </div>
         <div class="result" style="text-align: center;">
@@ -89,10 +89,11 @@
 </div>
 
 <script>
-    window.onbeforeunload = function() {
-        return "<b style=\"color:red\">Warning!!</b> you will be redirected to Games Home Page.";
-    }
 
+    $(window).bind('beforeunload', function(){
+        return "msg";
+    });
+    
     function randomInteger(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
     }
@@ -110,9 +111,6 @@
     }
     sum = 0
     before_start_function()
-    console.log({{size}})
-    console.log({{flash}})
-    console.log({{numbers}})
     num_array = []
     old_rand_num = -1
     for (let num = 0; num < {{numbers}}; num++) {
@@ -164,15 +162,6 @@
         display_numbers();
     }
 
-    function resolveAfter2Seconds() {
-        
-        document.getElementsByClassName("result")[0].childNodes[1].innerHTML = "<h1><span style=\"color : green\">Correct Advancing to next Level</span></h1>"
-        return new Promise(resolve => {
-            setTimeout(() => {
-                location.replace(location.href);
-            }, 2000);
-        });
-    }
     async function checkAnswer(){
         current_answer = document.getElementById('ans').value;
         if(Number(current_answer) == sum){
@@ -180,11 +169,23 @@
             location_string = location.href
             location_string = location_string.substr(0,location_string.length - 1);
             location_string += String({{current_level}} + 1)
+            $(window).unbind('beforeunload');
             location.replace(location_string);
         }
         else{
             console.log("2");
+            location_string = location.href
+            location_string = location_string.substr(0,location_string.length - 1);
+            location_string += String({{current_level}} + 1)
+            start_url = location_string.substr(0,location_string.length-3)
+            end_url = location_string.substr(location_string.length-3)
+            attemps = parseInt(end_url[0])
+            attemps += 1
+            end_url = end_url.substr(0,0) + attemps + end_url.substr(1);
+            location_string = start_url + end_url
             document.getElementsByClassName("result")[0].childNodes[1].innerHTML = "<h1><span style=\"color : red\">InCorrect</span></h1>"
+            $(window).unbind('beforeunload');
+            location.replace(location_string);
         }
         result_ele.style.display = "block";
     }
