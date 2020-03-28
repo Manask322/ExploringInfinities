@@ -5,6 +5,9 @@ from django.shortcuts import render ,redirect
 from django.contrib.auth.models import User
 from users.models import CustomUser
 from .models import Game
+from allauth.socialaccount.models import SocialAccount
+
+# print(SocialAccount.objects.all()[0].extra_data)
 
 
 level_list = [['1', '1500', '5'], ['1', '1500', '10'], ['1', '1500', '15'], 
@@ -29,6 +32,9 @@ for i in range(list_length):
 def home(request):
     all_users = CustomUser.objects.all().order_by('-high_score')
     if request.user.is_authenticated:
+        account_details = SocialAccount.objects.get(user=request.user).extra_data
+        print(account_details['people']['genders'][0]['value'])
+        print(account_details['people']['birthdays'][1]['date'])
         check_custom_user = CustomUser.objects.filter(user=request.user)
         flag = False
         if len(check_custom_user) == 0:

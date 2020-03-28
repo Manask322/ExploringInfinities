@@ -17,9 +17,22 @@
         integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
         crossorigin="anonymous"></script>
 </head>
+
+<style>
+    #title{
+        padding: 4%;
+        padding-right: 20%;
+        padding-bottom: 4%;
+        padding-left: 10%;
+        background-image: url("https://raw.githubusercontent.com/Manask322/ExploringInfinities/master/title.jpeg");
+        background-size: 100% 100%;
+    }
+
+</style>
 <body style="font-family: 'Courier New', Courier, monospace;">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="{% url 'home' %}">Exploring Infinities</a>
+        <div class="navbar-brand" id="title" >
+        </div>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>

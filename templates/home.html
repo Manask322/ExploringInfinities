@@ -8,37 +8,49 @@
 <style>
     #banner{
         
-        padding-top: 38%;
-        padding-left: 23%;
-        padding-bottom : 5%;
+        padding: 10%;  
+        /* padding-left: 25%; */
+        /* padding-bottom : 5%; */
         background-color: rgb(211, 132, 132);
-        background-image: url("https://raw.githubusercontent.com/Manask322/ExploringInfinities/master/bhanucover.jpg");
+        background-image: url("https://raw.githubusercontent.com/Manask322/ExploringInfinities/master/frontcover.jpg");
         background-size: 100% 100% ;
         background-repeat: no-repeat;
     }
+    
+    #gamesby{
+        background-image: url("https://raw.githubusercontent.com/Manask322/ExploringInfinities/master/gamesby.jpeg");
+        padding: 12%;
+        background-size: 50% 90%;
+        background-repeat: no-repeat;
+    }
+
 </style>
 <section>
-    <div class="row" id="banner">
-        <div class="col" style="background-color: rgb(172, 169, 161) ;opacity: 90%;border-radius: 5%;text-align:justify">
-            <p style="padding:1%;color: black;font-weight: bold;font-family:'Courier New', Courier, monospace;">
-                Here is the collection of number games which can improve your arithmetic skills and help you in cognitive development.
-            </p>
+    <div id="banner">
+        <div id="gamesby">
         </div>
-        <div class="col" style="margin-left: 10%;">
-            <div class="row">
-                {% if user.is_authenticated %}
-                    <a name="start_game" id="start_game" class="btn btn-primary" href="{% url 'games' %}" role="button">Browse</a>
-                {% else %}
-                    <a name="start_game" id="start_game" class="btn btn-primary" onclick="loginalert()" role="button">Browse</a>
-                {% endif %}
+        <div class="row" style="margin-left: 20%;">
+            <div class="col" style="background-color: rgb(172, 169, 161) ;opacity: 90%;border-radius: 5%;text-align:justify">
+                <p style="padding:1%;color: black;font-weight: bold;font-family:'Courier New', Courier, monospace;">
+                    Here is the collection of number games which can improve your arithmetic skills and help you in cognitive development.
+                </p>
             </div>
-            <br>
-            <div class="row">
-                {% if user.is_authenticated %}
-                    <a class="nav-link btn btn-primary" href="{% url 'account_logout' %}">Log Out</a>
-                {% else %}
-                    <a class="nav-link btn btn-primary" href="{% url 'login' %}">Log In to play Games</a>
-                {% endif %}
+            <div class="col" style="margin-left: 10%;">
+                <div class="row">
+                    {% if user.is_authenticated %}
+                        <a name="start_game" id="start_game" class="btn btn-primary" href="{% url 'games' %}" role="button">Browse</a>
+                    {% else %}
+                        <a name="start_game" id="start_game" class="btn btn-primary" onclick="loginalert()" role="button">Browse</a>
+                    {% endif %}
+                </div>
+                <br>
+                <div class="row">
+                    {% if user.is_authenticated %}
+                        <a class="nav-link btn btn-primary" href="{% url 'account_logout' %}">Log Out</a>
+                    {% else %}
+                        <a class="nav-link btn btn-primary" href="{% url 'login' %}">Log In to play Games</a>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>
