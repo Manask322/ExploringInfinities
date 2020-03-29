@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from users.models import CustomUser
 from .models import Game
 from allauth.socialaccount.models import SocialAccount
-
+from django.utils import timezone
 # print(SocialAccount.objects.all()[0].extra_data)
 
 
@@ -30,32 +30,27 @@ for i in range(list_length):
 
 
 def home(request):
+    game_count = 0
     all_users = CustomUser.objects.all().order_by('-high_score')
     if request.user.is_authenticated:
-        account_details = SocialAccount.objects.get(user=request.user).extra_data
-        print(account_details['people']['genders'][0]['value'])
-        print(account_details['people']['birthdays'][1]['date'])
-        check_custom_user = CustomUser.objects.filter(user=request.user)
         flag = False
-        if len(check_custom_user) == 0:
-            new_user = CustomUser()
-            new_user.user = User.objects.get(username=request.user)
-            new_user.current_score = 0
-            new_user.high_score = 0
-            new_user.save()
-            flag = True
         check_game_details = Game.objects.filter(user_id=request.user)
+        game_count = CustomUser.objects.filter(user=request.user).count()
         if len(check_game_details) == 0:
             new_game_user = Game()
             new_game_user.user_id = User.objects.get(username=request.user)
             new_game_user.current_level = 0
             new_game_user.save()
             flag =True
+        else:
+            game_details = Game.objects.get(user_id=request.user)
+            game_details.current_level = 0
+            game_details.save()
 
         if flag :
             return redirect(home)
     
-    return render(request,'home.html', {'users': all_users})
+    return render(request,'home.html', {'users': all_users,'game_count':game_count})
 
 def start_game(request):
     if not request.user.is_authenticated:
@@ -64,6 +59,7 @@ def start_game(request):
 
 
 def game(request,attemps,level):
+    
     if int(level) > 25 :
         return redirect(home)
     if not request.session.get('attemps'):
@@ -80,7 +76,7 @@ def game(request,attemps,level):
             game_details.flash = flash
             game_details.numbers = numbers
             game_details.save()
-            user_details = CustomUser.objects.get(user=request.user)
+            user_details = CustomUser.objects.latest('user','-date')
             user_details.current_score = 0
             user_details.save()
         except :
@@ -88,11 +84,24 @@ def game(request,attemps,level):
         return render(request,'game.html',{ 'size' : size, 'flash': flash, 'numbers': numbers,'current_level':1,'current_score':0 })
     else:
         game_details = Game.objects.get(user_id=request.user)
-        user_details = CustomUser.objects.get(user=request.user)
         if (game_details.current_level + 1 ) != int(level) and game_details.current_level != 0:
             return redirect(games)
         if( int(attemps) >= 2 ):
             return redirect(games)
+        if game_details.current_level == 0 :
+            new_user = CustomUser()
+            account_details = SocialAccount.objects.get(user=request.user).extra_data
+            print(account_details['people']['genders'][0]['value'])
+            print(account_details['people']['birthdays'][1]['date'])
+            new_user.gender = account_details['people']['genders'][0]['value']
+            new_user.age = timezone.now().date().year - account_details['people']['birthdays'][1]['date']['year']
+            new_user.current_score = 0
+            new_user.high_score = 0 
+            new_user.user = User.objects.get(username=request.user)
+            new_user.date = timezone.localtime()
+            new_user.save()
+            
+        user_details = CustomUser.objects.latest('user','date')
         level_details = level_list[game_details.current_level]
         game_details.current_level += 1
         size = level_details[0]
@@ -123,9 +132,6 @@ def games(request):
         game.current_level = 0
         game.save()
         current_level = 1
-        user_details = CustomUser.objects.get(user=request.user)
-        user_details.current_score = 0
-        user_details.save()
         attemps = 0
     except :
         return redirect(home)

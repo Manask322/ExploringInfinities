@@ -8,7 +8,7 @@
 <style>
     #banner{
         
-        padding: 10%;  
+        padding: 5%;  
         /* padding-left: 25%; */
         /* padding-bottom : 5%; */
         background-color: rgb(211, 132, 132);
@@ -19,9 +19,11 @@
     
     #gamesby{
         background-image: url("https://raw.githubusercontent.com/Manask322/ExploringInfinities/master/gamesby.jpeg");
-        padding: 12%;
-        background-size: 50% 90%;
+        padding-top: 2%;
+        padding-bottom: 18%;
+        background-size: 40% 80%;
         background-repeat: no-repeat;
+        /* margin-left: 10%; */
     }
 
 </style>
@@ -52,6 +54,14 @@
                     {% endif %}
                 </div>
             </div>
+            <div class="col" style="background-color: rgb(172, 169, 161) ;opacity: 90%;border-radius: 5%;">
+                <h2 style="padding:1%;color: black;font-weight: bold;font-family:'Courier New', Courier, monospace;text-align: center;">
+                    You played
+                    <b style="text-align: center;font-size: 100px;">{{game_count}}</b> 
+                <h2 style="padding:1%;color: black;font-weight: bold;font-family:'Courier New', Courier, monospace;text-align: center;">
+                    times.</h2>
+                </h2>
+            </div>
         </div>
     </div>
 </section>
@@ -71,6 +81,9 @@
                 <tr>
                     <th style="width: 2%;">Id</th>
                     <th>Name</th>
+                    <th>Age</th>
+                    <th>Gender</th>
+                    <th>Date</th>
                     <th>Score</th>
                 </tr>
             </thead>
@@ -79,6 +92,9 @@
                 <tr>
                     <th>{{ forloop.counter}}</th>
                     <th>{{user.user.username}}</th>
+                    <th>{{user.age}}</th>
+                    <th>{{user.gender}}</th>
+                    <th>{{user.date.date}}</th>
                     <th>{{user.high_score}}</th>
                 </tr>
                 {% endfor %}

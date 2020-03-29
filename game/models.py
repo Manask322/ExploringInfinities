@@ -11,7 +11,6 @@ class Game(models.Model):
     size = models.IntegerField(null=True,default=1)
     flash = models.IntegerField(null=True,default=1000)
     numbers = models.IntegerField(null=True,default=5)
-    date = models.DateTimeField(null=True,default=timezone.now)
 
     def __str__(self):
         return str(self.user_id)
