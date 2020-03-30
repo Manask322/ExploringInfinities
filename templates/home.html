@@ -34,6 +34,7 @@
 </style>
 <section>
     <div id="banner">
+        
         <div id="gamesby">
         </div>
         <div class="row" style="margin-left: 20%;">
@@ -59,13 +60,26 @@
                     {% endif %}
                 </div>
             </div>
-            <div class="col" style="background-color: rgb(172, 169, 161) ;opacity: 90%;border-radius: 5%;">
-                <h2 style="padding:1%;color: black;font-weight: bold;font-family:'Courier New', Courier, monospace;text-align: center;">
-                    You played
-                    <b style="text-align: center;font-size: 100px;">{{game_count}}</b> 
-                <h2 style="padding:1%;color: black;font-weight: bold;font-family:'Courier New', Courier, monospace;text-align: center;">
-                    times.</h2>
-                </h2>
+            <div class="col" >
+                <div style="background-color: rgb(172, 169, 161) ;opacity: 90%;border-radius: 5%;">
+                    <h4 style="color: black;font-weight: bold;font-family:'Courier New', Courier, monospace;text-align: center;">
+                        <b style="text-align: center;font-size: 70px;">{{all_count}}</b> 
+                    <!-- <h4 style="color: black;font-weight: bold;font-family:'Courier New', Courier, monospace;text-align: center;"> -->
+                        time(s) Games Played
+                    <!-- </h4> -->
+                    </h4>
+                </div>
+                {% if user.is_authenticated %}
+                    <div style="background-color: rgb(172, 169, 161) ;opacity: 90%;border-radius: 5%;">
+                        <h4 style="color: black;font-weight: bold;font-family:'Courier New', Courier, monospace;text-align: center;">
+                            You played
+                            <b style="text-align: center;font-size: 70px;">{{game_count}}</b> 
+                        <!-- <h4 style="color: black;font-weight: bold;font-family:'Courier New', Courier, monospace;text-align: center;"> -->
+                            time(s).</h4>
+                        <!-- </h4> -->
+                    </div>
+                {% endif %}
+                
             </div>
         </div>
     </div>
@@ -97,8 +111,21 @@
                 <tr>
                     <th>{{ forloop.counter}}</th>
                     <th>{{user.user.username}}</th>
-                    <th>{{user.age}}</th>
-                    <th>{{user.gender}}</th>
+                    <th>{% if user.age == -1 %}
+                        N/A
+                        {% else %}
+                      {{user.age}}
+                    {% endif %}
+                        
+                    </th>
+                    <th>
+                        {% if  user.gender %}
+                            {{user.gender}}
+                        {% else %}
+                            N/A
+                        {% endif %}
+
+                    </th>
                     <th>{{user.date.date}}</th>
                     <th>{{user.high_score}}</th>
                 </tr>

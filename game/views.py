@@ -32,6 +32,7 @@ for i in range(list_length):
 def home(request):
     game_count = 0
     all_users = CustomUser.objects.all().order_by('-high_score')
+    all_count = len(all_users)
     if request.user.is_authenticated:
         flag = False
         check_game_details = Game.objects.filter(user_id=request.user)
@@ -50,7 +51,7 @@ def home(request):
         if flag :
             return redirect(home)
     
-    return render(request,'home.html', {'users': all_users,'game_count':game_count})
+    return render(request,'home.html', {'users': all_users,'game_count':game_count,'all_count':all_count})
 
 def start_game(request):
     if not request.user.is_authenticated:
@@ -91,10 +92,19 @@ def game(request,attemps,level):
         if game_details.current_level == 0 :
             new_user = CustomUser()
             account_details = SocialAccount.objects.get(user=request.user).extra_data
-            print(account_details['people']['genders'][0]['value'])
-            print(account_details['people']['birthdays'][1]['date'])
-            new_user.gender = account_details['people']['genders'][0]['value']
-            new_user.age = timezone.now().date().year - account_details['people']['birthdays'][1]['date']['year']
+            try:
+                gender = account_details['people']['genders'][0]['value']
+            except :
+                gender = "Disabled"
+            try:
+                age = timezone.now().date().year - account_details['people']['birthdays'][1]['date']['year']
+            except :
+                try:
+                    age = timezone.now().date().year - account_details['people']['birthdays'][0]['date']['year']
+                except :
+                    age = -1 
+            new_user.gender = gender
+            new_user.age = age
             new_user.current_score = 0
             new_user.high_score = 0 
             new_user.user = User.objects.get(username=request.user)
