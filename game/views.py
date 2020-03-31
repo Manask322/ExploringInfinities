@@ -95,7 +95,7 @@ def game(request,attemps,level):
             try:
                 gender = account_details['people']['genders'][0]['value']
             except :
-                gender = "Disabled"
+                gender = "N/A"
             try:
                 age = timezone.now().date().year - account_details['people']['birthdays'][1]['date']['year']
             except :
